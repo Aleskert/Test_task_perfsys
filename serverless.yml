@@ -1,0 +1,31 @@
+service: test-task-perfsys
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+
+functions:
+  filesPost:
+    handler: handler.files_post
+    events:
+      - http:
+          path: files
+          method: post
+  filesGet:
+    handler: handler.files_get
+    events:
+      - http:
+          path: files/{file_id}
+          method: get
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+    zip: true

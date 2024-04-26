@@ -1,0 +1,64 @@
+openapi: 3.0.0
+info:
+  title: Text Extractor API
+  description: API for extracting text from files
+  version: 1.0.0
+servers:
+  - url: https://gztiln84na.execute-api.us-east-1.amazonaws.com/dev
+    description: Development Server
+paths:
+  /files:
+    post:
+      summary: Upload a file for text extraction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                callback_url:
+                  type: string
+                  format: uri
+                  description: Callback URL for receiving notification after text extraction
+              required:
+                - callback_url
+      responses:
+        '200':
+          description: Successful upload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  upload_url:
+                    type: string
+                    format: uri
+                    description: URL for uploading the file
+  /files/{file_id}:
+    get:
+      summary: Get information about text extraction for a file
+      parameters:
+        - name: file_id
+          in: path
+          required: true
+          description: ID of the file
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file_id:
+                    type: string
+                    description: ID of the file
+                  status:
+                    type: string
+                    description: Status of text extraction process
+                  text:
+                    type: string
+                    description: Extracted text from the file
